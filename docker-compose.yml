@@ -1,0 +1,25 @@
+version: '2.1'
+
+services:
+  nodejs-shop:
+    container_name: nodejs-shop
+    restart: always
+    build: .
+    # env_file:
+    #   - ./.env
+    environment:
+      - MONGO_USER=omrmtn
+      - MONGO_PASSWORD=5oczxeSFOMzZQH7o
+      - MONGO_DEFAULT_DATABASE=shop
+      - STRIPE_KEY=sk_test_CqtJsRu3yLTPqAqylvQqjawd0040zg0ePy
+    ports:
+      - 3000:3000
+    depends_on:
+     - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
