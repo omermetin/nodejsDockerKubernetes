@@ -1,0 +1,15 @@
+# Node Port Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-shop
+  labels:
+    app: nodejs-shop
+spec:
+  type: NodePort
+  ports:
+    - port: 8085
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    name: nodejs-shop

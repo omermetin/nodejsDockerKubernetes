@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-shop
+  labels:
+    app: nodejs-shop
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodejs-shop
+  template:
+    metadata:
+      name: nodejs-shop
+      labels:
+        app: nodejs-shop
+    spec:
+      containers:
+      - image: omrmtn/nodejs-shop
+        name: nodejs-shop
+        ports:
+          - containerPort: 3000
+            protocol: TCP
+        env:
+          - name: MONGO_USER
+            value: omrmtn
+          - name: MONGO_PASSWORD
+            value: 5oczxeSFOMzZQH7o
+          - name: MONGO_DEFAULT_DATABASE
+            value: shop
+          - name: STRIPE_KEY
+            value: sk_test_CqtJsRu3yLTPqAqylvQqjawd0040zg0ePy
