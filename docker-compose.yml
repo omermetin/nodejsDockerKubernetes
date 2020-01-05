@@ -3,6 +3,7 @@ version: '2.1'
 services:
   nodejs-shop:
     container_name: nodejs-shop
+    image: omrmtn/nodejs-shop
     restart: always
     build: .
     # env_file:
@@ -18,7 +19,8 @@ services:
      - mongo
   mongo:
     container_name: mongo
-    image: mongo
+    image: omrmtn/mongo
+    build: .
     volumes:
       - ./data:/data/db
     ports:
