@@ -1,5 +1,5 @@
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: nodejs-shop
   namespace: default
@@ -78,3 +78,65 @@ spec:
 #       lastTransitionTime: '2020-01-04T02:53:14Z'
 #       reason: MinimumReplicasAvailable
 #       message: Deployment has minimum availability.
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-shop
+  labels:
+    k8s: nodejs-shop
+spec:
+  type: NodePort
+  ports:
+    - port: 8085
+      targetPort: 8085
+  selector:
+    matchLabels:
+      k8s-app: nodejs-shop
+---
+# Mongo host path rc
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    k8s: mongo
+  name: mongo-controller
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s: mongo
+    spec:
+      containers:
+      - image: omrmtn/mongo
+        name: mongo
+        ports:
+        - name: mongo
+          containerPort: 27017
+          hostPort: 27017
+        volumeMounts:
+        - name: mongo-persistent-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongo-persistent-storage
+        hostPath:
+         path: /tmp/dbbackup
+---
+# Mongo Node Port RC
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s: mongo
+  name: mongo
+spec:
+  type: ClusterIP
+  ports:
+    - port: 27017
+      targetPort: 27017
+  selector:
+    matchLabels:
+      k8s-app: mongo
